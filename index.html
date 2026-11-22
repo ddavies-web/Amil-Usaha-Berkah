@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Amil Usaha Berkah</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Konsep: satu halaman panjang. Header lengket berisi banner SIMULASI (selalu terlihat) dan navigasi 7 bagian.
+   Laporan memakai tabel bergaya buku kas. Nuansa indigo batik, kuning kunyit hanya untuk label SIMULASI. */
+:root{
+  --bg:#F5F6FB; --surface:#FFFFFF; --surface-2:#ECEFF8;
+  --fg:#12163A; --muted:#4B5078; --line:#D3D8EC;
+  --accent:#2F3CA0; --accent-fg:#FFFFFF;
+  --good:#17724A; --good-bg:#DDF3E8;
+  --warn-bg:#FFD23F; --warn-fg:#1A1500;
+  --seg1:#2F3CA0; --seg2:#E0A200; --seg3:#8B90B8;
+  --font-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1128; --surface:#171B3B; --surface-2:#1F2450;
+    --fg:#E9EBFA; --muted:#A9AED6; --line:#2E3468;
+    --accent:#9AA6FF; --accent-fg:#0E1128;
+    --good:#6FDDA6; --good-bg:#12362A;
+    --seg1:#9AA6FF; --seg2:#E0A200; --seg3:#8B90B8;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1128; --surface:#171B3B; --surface-2:#1F2450;
+  --fg:#E9EBFA; --muted:#A9AED6; --line:#2E3468;
+  --accent:#9AA6FF; --accent-fg:#0E1128;
+  --good:#6FDDA6; --good-bg:#12362A;
+  --seg1:#9AA6FF; --seg2:#E0A200; --seg3:#8B90B8;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:96px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--font-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--warn-bg)}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.banner{background-color:var(--warn-bg);color:var(--warn-fg);font:700 .78rem/1.3 var(--font-body);letter-spacing:.08em;text-transform:uppercase;
+  background-image:repeating-linear-gradient(135deg,#1A1500 0 8px,transparent 8px 16px);background-size:100% 4px;background-repeat:no-repeat;background-position:bottom}
+.banner .wrap{padding-block:.55rem .75rem}
+.nav{background:var(--surface);border-bottom:1px solid var(--line)}
+.links{display:flex;gap:.2rem;overflow-x:auto;list-style:none;margin:0;padding:.35rem 0;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{display:block;padding:.45rem .8rem;border-radius:6px;color:var(--fg);text-decoration:none;font-weight:500;font-size:.92rem;white-space:nowrap}
+.links a:hover{background:var(--surface-2)}
+
+/* Typography */
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.1rem,7vw,3.4rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(1.65rem,4.5vw,2.2rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+.lead{max-width:62ch;color:var(--muted);font-size:1.05rem}
+.tag{font-size:.74rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.fill{background:var(--warn-bg);color:var(--warn-fg);padding:0 .3rem;border-radius:3px;font-weight:600}
+.num-t{font-variant-numeric:tabular-nums}
+
+/* Sections */
+.sec{padding-block:3.2rem}
+.sec.alt{background:var(--surface-2)}
+.sec .wrap>*+*{margin-top:1.1rem}
+.sec .wrap>h2+.lead{margin-top:.6rem}
+.sec .wrap>h3{margin-top:2.2rem}
+.cols{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.cols>*{min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.15rem}
+.card>*+*{margin-top:.5rem}
+.panel{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:1.25rem}
+.alt .panel{background:var(--surface)}
+
+/* Hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line)}
+.hero .wrap{padding-block:2.6rem 3rem;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));align-items:start}
+.hero .wrap>*{min-width:0;margin-top:0}
+.brand{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.brand svg{width:56px;height:56px;flex:none}
+.brand b{font:700 1.15rem var(--font-display)}
+.brand span{display:block;font-size:.85rem;color:var(--muted)}
+.hero h1{margin-bottom:.9rem}
+.cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.btn{display:inline-block;padding:.65rem 1.1rem;border-radius:8px;font-weight:600;text-decoration:none;border:2px solid var(--accent);background:var(--accent);color:var(--accent-fg)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.meter{height:14px;border-radius:99px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin:.7rem 0 .5rem}
+.meter span{display:block;height:100%;background:var(--accent)}
+.big{font:700 2rem/1.1 var(--font-display);font-variant-numeric:tabular-nums}
+.stats{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;margin-top:.9rem;font-size:.92rem;color:var(--muted)}
+.stats b{color:var(--fg);font-variant-numeric:tabular-nums}
+.visi{font:500 clamp(1.15rem,3vw,1.4rem)/1.35 var(--font-display);max-width:40ch}
+ol.misi{margin:0;padding-left:1.2rem;display:grid;gap:.5rem;max-width:70ch}
+
+/* Program */
+.tahap{display:flex;align-items:center;gap:.7rem}
+.tahap::after{content:"";flex:1;height:1px;background:var(--line)}
+.poin{display:flex;flex-direction:column}
+.poin .n{width:2rem;height:2rem;border-radius:50%;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font:700 .85rem var(--font-display)}
+.poin .go{margin-top:auto;padding-top:.6rem;font-size:.9rem;font-weight:600}
+.poin h3{margin-top:.5rem}
+
+/* Tables */
+.tw{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.7rem .8rem;font-weight:600;font-family:var(--font-display);font-size:1rem}
+th,td{padding:.55rem .8rem;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+thead th{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-top:1px solid var(--line)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tfoot td,tfoot th{font-weight:700;background:var(--surface-2)}
+.mono{font-family:var(--font-mono);font-size:.84rem}
+.ok{display:inline-block;background:var(--good-bg);color:var(--good);padding:.1rem .55rem;border-radius:99px;font-weight:600;font-size:.82rem}
+.note{font-size:.88rem;color:var(--muted);max-width:75ch}
+
+/* Stacked bar + legend */
+.stack{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.stack span:nth-child(1){background:var(--seg1)}
+.stack span:nth-child(2){background:var(--seg2)}
+.stack span:nth-child(3){background:var(--seg3)}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;list-style:none;margin:.6rem 0 0;padding:0;font-size:.9rem}
+.legend li{display:flex;align-items:center;gap:.4rem}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.legend li:nth-child(1) i{background:var(--seg1)}
+.legend li:nth-child(2) i{background:var(--seg2)}
+.legend li:nth-child(3) i{background:var(--seg3)}
+
+/* Pengurus */
+.photo{aspect-ratio:3/4;max-width:100%;width:100%;border:2px dashed var(--accent);border-radius:10px;display:grid;place-items:center;text-align:center;padding:1rem;color:var(--muted);font-size:.9rem;background:var(--surface-2)}
+.founder{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start}
+.founder>*{min-width:0}
+.founder .card>h3{margin-top:0}
+
+.pic{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;border-radius:10px;background:var(--surface-2)}
+
+/* Kalkulator */
+.calc{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.calc>*{min-width:0}
+label{display:block;font-weight:600;font-size:.9rem;margin-bottom:.3rem}
+input[type=number]{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit;font-variant-numeric:tabular-nums}
+.result{margin-top:.9rem;padding:.8rem 1rem;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)}
+
+/* Galeri */
+.shot{position:relative;aspect-ratio:4/3;max-width:100%;border:1px dashed var(--line);border-radius:8px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent)}
+.shot svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.shot em{position:absolute;top:.5rem;left:.5rem;font:700 .68rem var(--font-body);font-style:normal;letter-spacing:.08em;background:var(--warn-bg);color:var(--warn-fg);padding:.15rem .4rem;border-radius:3px}
+.fig .card{padding:.8rem}
+.fig p{font-size:.9rem}
+.fig .cap{color:var(--muted);font-size:.84rem}
+
+/* Footer */
+.foot{background:var(--surface-2);border-top:1px solid var(--line);padding-block:2rem 2.5rem;font-size:.9rem;color:var(--muted)}
+.foot .wrap>*+*{margin-top:.7rem}
+.foot b{color:var(--fg)}
+dl.k{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;margin:0}
+dl.k dt{font-weight:600;color:var(--fg)}
+dl.k dd{margin:0;min-width:0;overflow-wrap:anywhere}
+</style>
+<style>img{max-width:100%}</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="banner"><div class="wrap">SIMULASI – TUGAS KULIAH</div></div>
+  <nav class="nav" aria-label="Navigasi utama">
+    <div class="wrap">
+      <ul class="links">
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#pengurus">Profil &amp; Pengurus</a></li>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#donasi">Donasi</a></li>
+        <li><a href="#laporan">Laporan</a></li>
+        <li><a href="#galeri">Galeri Bukti</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+<!-- 1. BERANDA -->
+<section class="hero" id="beranda">
+  <div class="wrap">
+    <div>
+      <div class="brand">
+        <svg viewBox="0 0 48 48" role="img" aria-label="Logo Amil Usaha Berkah: tunas tumbuh dari koin">
+          <circle cx="24" cy="24" r="23" fill="var(--accent)"/>
+          <path d="M24 37V23" stroke="var(--accent-fg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M24 25c-7.5 0-11-4-11-9.5 7.500 0 11 3.500 11 9.500z" fill="#FFD23F"/>
+          <path d="M24 22c0-6.500 3.500-10 10.500-10 0 6.500-3.500 10-10.500 10z" fill="var(--accent-fg)"/>
+          <path d="M16 37h16" stroke="var(--accent-fg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div><b>Amil Usaha Berkah</b><span>Lembaga amil simulasi · Yogyakarta</span></div>
+      </div>
+      <h1>Zakat yang berubah menjadi modal usaha.</h1>
+      <p class="lead" style="margin-top:.9rem">Kami menghimpun zakat, infaq, dan wakaf untuk modal dan alat usaha pedagang kecil di sekitar kampus. Setiap rupiah dilaporkan, termasuk hak amil.</p>
+      <p class="note" style="margin-top:.8rem">Ini lembaga fiktif untuk tugas kuliah Islamic Philanthropy. Lembaga, donatur, penerima, dan angka di website ini tidak nyata. Kami tidak menerima uang sungguhan.</p>
+      <div class="cta">
+        <a class="btn" href="#donasi">Lihat kampanye</a>
+        <a class="btn ghost" href="#laporan">Baca laporan</a>
+      </div>
+    </div>
+    <div class="panel" aria-label="Ringkasan Gelombang 1">
+      <span class="tag">Gelombang 1 · 1–10 Oktober 2026 (simulasi)</span>
+      <div class="big" style="margin-top:.4rem">Rp20.000.000</div>
+      <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Dana terkumpul 100 persen dari target"><span style="width:100%"></span></div>
+      <p style="font-size:.92rem">Terkumpul 100% dari target Rp20.000.000</p>
+      <div class="stats">
+        <span><b>12</b> donatur</span>
+        <span><b>5</b> usaha penerima</span>
+        <span><b>Rp17.000.000</b> tersalur</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <span class="tag">Visi</span>
+    <p class="visi">Zakat menjadi modal usaha yang mengangkat mustahik menjadi muzakki.</p>
+    <span class="tag" style="display:block;margin-top:1.6rem">Misi</span>
+    <ol class="misi">
+      <li>Menghimpun zakat, infaq, dan wakaf dari mahasiswa dan masyarakat sekitar kampus secara terbuka.</li>
+      <li>Menyalurkan modal usaha produktif kepada pedagang kecil yang tergolong fakir dan miskin.</li>
+      <li>Mendampingi penerima selama empat minggu agar usahanya tumbuh dan mandiri.</li>
+      <li>Melaporkan setiap rupiah kepada donatur, termasuk hak amil dan biaya operasional.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 2. PROFIL & PENGURUS -->
+<section class="sec alt" id="pengurus">
+  <div class="wrap">
+    <h2>Profil &amp; Pengurus</h2>
+    <p class="lead">Amil Usaha Berkah didirikan sebagai lembaga amil simulasi untuk belajar mengelola zakat produktif: dari penghimpunan sampai evaluasi dampak. Lembaga ini tidak terdaftar sebagai BAZNAS atau LAZ.</p>
+
+    <div class="founder">
+      <div class="card">
+        <img class="pic" src="data:image/jpeg;base64,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" width="600" height="835" alt="Foto Muhammad Haikal Davisara, pendiri dan ketua">
+        <h3 style="margin-top:.8rem">Muhammad Haikal Davisara</h3>
+        <p>Pendiri &amp; Ketua</p>
+        <p class="note">NIM 24108010093 · Ekonomi Syariah, FEBI UIN Sunan Kalijaga</p>
+      </div>
+      <div class="cols" style="grid-template-columns:1fr">
+        <div class="card">
+          <span class="tag">Bendahara · relawan</span>
+          <h3>Arifin Ilham</h3>
+          <p class="note">Mencatat penerimaan dan penyaluran, menyusun laporan.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Koordinator lapangan · dirangkap Ketua</span>
+          <h3>Muhammad Haikal Davisara</h3>
+          <p class="note">Survei penerima, serah terima, dan pendampingan mingguan.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Pengawas syariah internal</span>
+          <h3>Ustaz pembimbing (tokoh fiktif)</h3>
+          <p class="note">Memeriksa akad, hak amil, dan pemisahan dana.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Mitra penyalur zakat</span>
+          <h3>Lembaga mitra resmi (fiktif)</h3>
+          <p class="note">Dalam simulasi, penyaluran zakat dibayangkan lewat mitra berizin, sesuai aturan tugas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PROGRAM -->
+<section class="sec" id="program">
+  <div class="wrap">
+    <h2>Program: 10 poin dari penghimpunan sampai evaluasi</h2>
+    <p class="lead">Program Modal Berkah memberi modal usaha, alat usaha, dan pendampingan empat minggu untuk lima pedagang kecil. Urutan poin di bawah mengikuti alur kerja kami.</p>
+
+    <h3 class="tahap">Penghimpunan</h3>
+    <div class="cols">
+      <article class="card poin">
+        <span class="n">1</span>
+        <h3>Penghimpunan (fundraising)</h3>
+        <p>Target Gelombang 1: Rp20.000.000 dari 12 donatur untuk 5 usaha penerima, selama 1–10 Oktober 2026. Kanal: transfer ke rekening kegiatan (fiktif), QRIS (ilustrasi), Instagram, dan grup kelas. Strategi: cerita singkat tiap usaha dengan inisial, ajakan zakat dan infaq, serta laporan progres harian.</p>
+        <a class="go" href="#donasi">Lihat kampanye →</a>
+      </article>
+      <article class="card poin">
+        <span class="n">2</span>
+        <h3>Penerimaan &amp; pencatatan</h3>
+        <p>Setiap donasi dicatat di buku kas: tanggal, nama donatur yang disamarkan, akad, nominal, kanal, dan nomor transaksi berformat SIM-1026-001. Jumlah dari semua baris dicocokkan dengan total dana masuk.</p>
+        <a class="go" href="#rekap">Lihat rekap penerimaan →</a>
+      </article>
+    </div>
+
+    <h3 class="tahap">Pengelolaan</h3>
+    <div class="cols">
+      <article class="card poin">
+        <span class="n">3</span>
+        <h3>Pemisahan per akad &amp; jenis filantropi</h3>
+        <p>Dana dibagi menjadi zakat maal Rp12.000.000 (60%), infaq/sedekah Rp6.000.000 (30%), dan wakaf alat usaha Rp2.000.000 (10%). Masing-masing dicatat di buku terpisah. Donasi tenaga (jam relawan) dan ilmu (kelas pembukuan) dicatat sendiri, tidak dicampur dengan uang.</p>
+        <a class="go" href="#akad">Lihat pemisahan dana →</a>
+      </article>
+      <article class="card poin">
+        <span class="n">4</span>
+        <h3>Pengelolaan &amp; hak amil</h3>
+        <p>Hak amil diambil dari zakat sebesar 10% (Rp1.200.000), di bawah batas 1/8 atau 12,5% (Rp1.500.000). Biaya operasional Rp800.000 diambil dari infaq, bukan dari zakat, dan dirinci terbuka. Wakaf tidak dipotong.</p>
+        <a class="go" href="#alokasi">Lihat rincian alokasi →</a>
+      </article>
+    </div>
+
+    <h3 class="tahap">Penyaluran</h3>
+    <div class="cols">
+      <article class="card poin">
+        <span class="n">5</span>
+        <h3>Identifikasi &amp; verifikasi penerima</h3>
+        <p>Penerima adalah pelaku usaha mikro dari asnaf fakir dan miskin. Kriterianya: penghasilan harian tidak menentu, usaha sudah berjalan, tidak punya modal cadangan, dan bersedia didampingi. Verifikasi lewat survei lokasi, wawancara, dan surat keterangan RT.</p>
+        <a class="go" href="#penerima">Lihat profil penerima →</a>
+      </article>
+      <article class="card poin">
+        <span class="n">6</span>
+        <h3>Perencanaan program penyaluran</h3>
+        <p>Bentuk bantuan produktif: modal usaha dari zakat, perlengkapan dan stok dari infaq, serta alat usaha dari wakaf, ditambah pendampingan empat minggu. Jadwal, lokasi, dan penanggung jawab tiap tahap ada di tabel rencana.</p>
+        <a class="go" href="#rencana">Lihat jadwal →</a>
+      </article>
+      <article class="card poin">
+        <span class="n">7</span>
+        <h3>Pendistribusian / pendayagunaan</h3>
+        <p>Tiap penerima mendapat Rp3.400.000: Rp2.060.000 modal usaha (zakat), Rp940.000 perlengkapan dan stok (infaq), serta Rp400.000 alat usaha (wakaf). Serah terima dilakukan 17 Oktober 2026 dengan berita acara, lalu dilanjutkan kunjungan pendampingan tiap minggu.</p>
+        <a class="go" href="#galeri">Lihat galeri →</a>
+      </article>
+    </div>
+
+    <h3 class="tahap">Akuntabilitas</h3>
+    <div class="cols">
+      <article class="card poin">
+        <span class="n">8</span>
+        <h3>Pelaporan kepada donatur</h3>
+        <p>Donatur menerima kabar ringkas lewat Instagram setiap minggu. Laporan lengkap berisi dana masuk, dana tersalur, hak amil, sisa dana, dan kabar penerima dimuat di halaman Laporan setelah pendampingan selesai.</p>
+        <a class="go" href="#ringkasan">Lihat laporan →</a>
+      </article>
+      <article class="card poin">
+        <span class="n">9</span>
+        <h3>Pengawasan &amp; audit</h3>
+        <p>Bendahara mencatat, pengawas syariah internal memeriksa akad, batas hak amil, dan pemisahan dana. Pemeriksaan internal dilakukan 15 November 2026 dan hasilnya dipublikasikan.</p>
+        <a class="go" href="#audit">Lihat hasil pemeriksaan →</a>
+      </article>
+    </div>
+
+    <h3 class="tahap">Evaluasi</h3>
+    <div class="cols">
+      <article class="card poin">
+        <span class="n">10</span>
+        <h3>Evaluasi dampak &amp; tindak lanjut</h3>
+        <p>Dampak diukur dari omzet harian tiap usaha sebelum dan sesudah pendampingan. Hasil simulasi: rata-rata omzet naik 71%. Kendala dan rencana Gelombang 2 dijelaskan di halaman Laporan.</p>
+        <a class="go" href="#evaluasi">Lihat evaluasi →</a>
+      </article>
+    </div>
+
+    <h3 id="penerima">Profil penerima &amp; kriteria verifikasi</h3>
+    <p class="note">Nama disamarkan dengan inisial. Tidak ada NIK atau alamat lengkap yang dipublikasikan.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Kode</th><th>Usaha</th><th>Asnaf</th><th>Kondisi</th><th>Verifikasi</th></tr></thead>
+        <tbody>
+          <tr><td>P1</td><td>Gorengan keliling (Ibu S.)</td><td>Miskin</td><td>Omzet harian tidak tetap, modal habis untuk kebutuhan rumah</td><td>Survei lokasi, wawancara, surat RT</td></tr>
+          <tr><td>P2</td><td>Angkringan (Bapak A.)</td><td>Miskin</td><td>Perlu tambahan stok, tidak punya tabungan usaha</td><td>Survei lokasi, wawancara, surat RT</td></tr>
+          <tr><td>P3</td><td>Jahit rumahan (Ibu R.)</td><td>Fakir</td><td>Pesanan sedikit, mesin jahit sering rusak</td><td>Survei lokasi, wawancara, surat RT</td></tr>
+          <tr><td>P4</td><td>Sayur gerobak (Bapak M.)</td><td>Fakir</td><td>Gerobak sewa harian, pendapatan hampir habis untuk sewa</td><td>Survei lokasi, wawancara, surat RT</td></tr>
+          <tr><td>P5</td><td>Es dan kue pasar (Ibu T.)</td><td>Miskin</td><td>Hanya berjualan saat modal ada</td><td>Survei lokasi, wawancara, surat RT</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Syarat tambahan: penerima menandatangani izin dokumentasi dan bersedia mengikuti pendampingan empat minggu.</p>
+
+    <h3 id="rencana">Rencana &amp; jadwal penyaluran</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Tahap</th><th>Tanggal</th><th>Lokasi</th><th>PIC</th><th>Bentuk</th></tr></thead>
+        <tbody>
+          <tr><td>Penghimpunan</td><td>1–10 Okt 2026</td><td>Daring: Instagram, grup kelas</td><td>Ketua</td><td>Kampanye digital</td></tr>
+          <tr><td>Verifikasi penerima</td><td>5–12 Okt 2026</td><td>Pasar dan permukiman sekitar kampus (fiktif)</td><td>Koordinator lapangan</td><td>Survei, wawancara, surat RT</td></tr>
+          <tr><td>Serah terima</td><td>17 Okt 2026</td><td>Balai RW setempat (fiktif)</td><td>Ketua dan Bendahara</td><td>Modal usaha dan alat wakaf</td></tr>
+          <tr><td>Pendampingan</td><td>17 Okt–14 Nov 2026</td><td>Lokasi usaha tiap penerima</td><td>Koordinator lapangan</td><td>Kelas pembukuan, kunjungan mingguan</td></tr>
+          <tr><td>Evaluasi</td><td>21 Nov 2026</td><td>Daring dan lokasi usaha</td><td>Ketua dan pengawas syariah</td><td>Wawancara, bandingkan omzet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 4. DONASI / KAMPANYE -->
+<section class="sec alt" id="donasi">
+  <div class="wrap">
+    <h2>Donasi &amp; Kampanye</h2>
+    <p class="lead">Kampanye Modal Berkah Gelombang 1 sudah mencapai target. Gelombang 2 direncanakan Januari 2027 dengan target Rp25.000.000 untuk 7 usaha. Semua kanal di bawah ini fiktif.</p>
+
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Target dan progres</span>
+        <div class="big">Rp20.000.000</div>
+        <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Progres 100 persen"><span style="width:100%"></span></div>
+        <p>100% dari target · 12 donatur · 5 usaha penerima</p>
+      </div>
+      <div class="card">
+        <span class="tag">Kanal donasi (fiktif)</span>
+        <dl class="k" style="margin-top:.5rem">
+          <dt>Transfer</dt><dd>Rekening kegiatan <span class="mono">XXXX-XXXX-XXXX</span> a.n. Amil Usaha Berkah. Bukan rekening asli.</dd>
+          <dt>QRIS</dt><dd>Ilustrasi saja, tidak bisa dipindai.</dd>
+          <dt>Konfirmasi</dt><dd>Kirim bukti ke kontak fiktif di bagian Kontak.</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <span class="tag">Cara ikut berdonasi</span>
+        <ol style="margin:.5rem 0 0;padding-left:1.2rem;display:grid;gap:.3rem">
+          <li>Pilih akad: zakat maal, infaq/sedekah, atau wakaf alat usaha.</li>
+          <li>Transfer ke kanal kegiatan.</li>
+          <li>Kirim bukti dan nama samaran untuk rekap.</li>
+          <li>Terima laporan mingguan dan laporan akhir.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3>Hitung zakat maal</h3>
+    <div class="panel">
+      <p class="note" style="margin-bottom:.9rem">Zakat maal wajib bila harta sudah dimiliki satu tahun (haul) dan mencapai nisab setara 85 gram emas. Besarnya 2,5% dari harta. Angka awal di bawah hanya contoh, ganti dengan harga emas terbaru dan hartamu.</p>
+      <div class="calc">
+        <div><label for="emas">Harga emas per gram (Rp)</label><input id="emas" type="number" inputmode="numeric" min="0" step="1000" value="2000000"></div>
+        <div><label for="harta">Total harta tersimpan 1 tahun (Rp)</label><input id="harta" type="number" inputmode="numeric" min="0" step="100000" value="200000000"></div>
+      </div>
+      <div class="result" id="hasil" aria-live="polite"></div>
+    </div>
+    <p class="note">Perhitungan ini alat bantu belajar. Untuk kewajiban zakat yang sebenarnya, tanyakan ke lembaga zakat resmi atau ulama.</p>
+  </div>
+</section>
+
+<!-- 5. LAPORAN & TRANSPARANSI -->
+<section class="sec" id="laporan">
+  <div class="wrap">
+    <h2>Laporan &amp; Transparansi</h2>
+    <p class="lead">Laporan Gelombang 1, periode 1 Oktober–21 November 2026. Seluruh angka fiktif dan saling cocok antar tabel.</p>
+
+    <h3 id="ringkasan">Ringkasan: dana masuk sama dengan dana keluar ditambah sisa</h3>
+    <div class="panel">
+      <div class="stack" role="img" aria-label="Tersalur 85 persen, hak amil dan biaya 10 persen, sisa dana 5 persen"><span style="width:85%"></span><span style="width:10%"></span><span style="width:5%"></span></div>
+      <ul class="legend">
+        <li><i></i>Tersalur ke penerima 85%</li>
+        <li><i></i>Hak amil dan biaya 10%</li>
+        <li><i></i>Sisa dana 5%</li>
+      </ul>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Komponen</th><th class="r">Rupiah</th><th class="r">Persen</th></tr></thead>
+        <tbody>
+          <tr><td>Dana masuk</td><td class="r">20.000.000</td><td class="r">100%</td></tr>
+          <tr><td>Tersalur ke penerima</td><td class="r">17.000.000</td><td class="r">85%</td></tr>
+          <tr><td>Hak amil dan biaya operasional</td><td class="r">2.000.000</td><td class="r">10%</td></tr>
+          <tr><td>Sisa dana</td><td class="r">1.000.000</td><td class="r">5%</td></tr>
+        </tbody>
+        <tfoot><tr><td>Tersalur + hak amil/biaya + sisa</td><td class="r">20.000.000</td><td class="r"><span class="ok">Seimbang, selisih Rp0</span></td></tr></tfoot>
+      </table>
+    </div>
+
+    <h3 id="rekap">A. Rekap penerimaan</h3>
+    <p class="note">Nama donatur disamarkan. Nomor transaksi adalah contoh format, bukan transaksi sungguhan.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>No. transaksi</th><th>Tanggal</th><th>Donatur</th><th>Akad</th><th>Kanal</th><th class="r">Rupiah</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">SIM-1026-001</td><td>1 Okt</td><td>Hamba Allah 1</td><td>Zakat maal</td><td>Transfer</td><td class="r">2.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-002</td><td>2 Okt</td><td>Hamba Allah 2</td><td>Zakat maal</td><td>QRIS</td><td class="r">1.500.000</td></tr>
+          <tr><td class="mono">SIM-1026-003</td><td>3 Okt</td><td>Hamba Allah 3</td><td>Zakat maal</td><td>Transfer</td><td class="r">3.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-004</td><td>4 Okt</td><td>Hamba Allah 4</td><td>Zakat maal</td><td>Transfer</td><td class="r">2.500.000</td></tr>
+          <tr><td class="mono">SIM-1026-005</td><td>5 Okt</td><td>Hamba Allah 5</td><td>Zakat maal</td><td>Transfer</td><td class="r">3.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-006</td><td>6 Okt</td><td>Hamba Allah 6</td><td>Infaq</td><td>QRIS</td><td class="r">1.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-007</td><td>6 Okt</td><td>Hamba Allah 7</td><td>Infaq</td><td>QRIS</td><td class="r">500.000</td></tr>
+          <tr><td class="mono">SIM-1026-008</td><td>7 Okt</td><td>Hamba Allah 8</td><td>Infaq</td><td>Transfer</td><td class="r">2.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-009</td><td>8 Okt</td><td>Hamba Allah 9</td><td>Infaq</td><td>Transfer</td><td class="r">1.500.000</td></tr>
+          <tr><td class="mono">SIM-1026-010</td><td>9 Okt</td><td>Hamba Allah 10</td><td>Infaq</td><td>QRIS</td><td class="r">1.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-011</td><td>9 Okt</td><td>Hamba Allah 11</td><td>Wakaf alat usaha</td><td>Transfer</td><td class="r">1.000.000</td></tr>
+          <tr><td class="mono">SIM-1026-012</td><td>10 Okt</td><td>Hamba Allah 12</td><td>Wakaf alat usaha</td><td>Transfer</td><td class="r">1.000.000</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="5">Total dana masuk (12 donatur)</td><td class="r">20.000.000</td></tr></tfoot>
+      </table>
+    </div>
+
+    <h3 id="akad">B. Pemisahan dana per akad</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Akad</th><th class="r">Masuk</th><th class="r">Hak amil / biaya</th><th class="r">Tersalur</th><th class="r">Sisa</th></tr></thead>
+        <tbody>
+          <tr><td>Zakat maal</td><td class="r">12.000.000</td><td class="r">1.200.000</td><td class="r">10.300.000</td><td class="r">500.000</td></tr>
+          <tr><td>Infaq / sedekah</td><td class="r">6.000.000</td><td class="r">800.000</td><td class="r">4.700.000</td><td class="r">500.000</td></tr>
+          <tr><td>Wakaf alat usaha</td><td class="r">2.000.000</td><td class="r">0</td><td class="r">2.000.000</td><td class="r">0</td></tr>
+        </tbody>
+        <tfoot><tr><td>Total</td><td class="r">20.000.000</td><td class="r">2.000.000</td><td class="r">17.000.000</td><td class="r">1.000.000</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Donasi tenaga (dicatat terpisah)</span>
+        <p>2 relawan, total 40 jam: survei 12 jam, serah terima 8 jam, pendampingan 20 jam.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Donasi ilmu (dicatat terpisah)</span>
+        <p>Kelas “Catat Untung Rugi Harian”, 2 jam, 5 peserta. Nilai rata-rata pre-test 45 naik menjadi 82 pada post-test (skala 100, data simulasi).</p>
+      </div>
+    </div>
+
+    <h3 id="alokasi">C. Alokasi dan hak amil</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Pos</th><th>Sumber dana</th><th class="r">Persen</th><th class="r">Rupiah</th></tr></thead>
+        <tbody>
+          <tr><td>Hak amil zakat</td><td>Zakat maal Rp12.000.000</td><td class="r">10%</td><td class="r">1.200.000</td></tr>
+          <tr><td>Batas hak amil zakat (1/8)</td><td>Zakat maal Rp12.000.000</td><td class="r">12,5%</td><td class="r">1.500.000</td></tr>
+          <tr><td>Biaya operasional</td><td>Infaq Rp6.000.000</td><td class="r">13,3%</td><td class="r">800.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Hak amil zakat 10% berada di bawah batas 12,5%. Biaya operasional diambil dari infaq, jadi batas 1/8 zakat tidak berlaku untuknya. Rinciannya: pulsa dan internet Rp150.000, transport survei Rp350.000, cetak berita acara dan materi kelas Rp300.000.</p>
+
+    <h3>D. Penyaluran per penerima</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Penerima</th><th class="r">Modal usaha (zakat)</th><th class="r">Perlengkapan (infaq)</th><th class="r">Alat usaha (wakaf)</th><th class="r">Total</th></tr></thead>
+        <tbody>
+          <tr><td>P1 · Ibu S.</td><td class="r">2.060.000</td><td class="r">940.000</td><td class="r">400.000</td><td class="r">3.400.000</td></tr>
+          <tr><td>P2 · Bapak A.</td><td class="r">2.060.000</td><td class="r">940.000</td><td class="r">400.000</td><td class="r">3.400.000</td></tr>
+          <tr><td>P3 · Ibu R.</td><td class="r">2.060.000</td><td class="r">940.000</td><td class="r">400.000</td><td class="r">3.400.000</td></tr>
+          <tr><td>P4 · Bapak M.</td><td class="r">2.060.000</td><td class="r">940.000</td><td class="r">400.000</td><td class="r">3.400.000</td></tr>
+          <tr><td>P5 · Ibu T.</td><td class="r">2.060.000</td><td class="r">940.000</td><td class="r">400.000</td><td class="r">3.400.000</td></tr>
+        </tbody>
+        <tfoot><tr><td>Total</td><td class="r">10.300.000</td><td class="r">4.700.000</td><td class="r">2.000.000</td><td class="r">17.000.000</td></tr></tfoot>
+      </table>
+    </div>
+    <p class="note">Akad: modal dari zakat diberikan sebagai milik penuh penerima (tamlik). Alat usaha dari wakaf tetap tercatat sebagai aset wakaf dan dipinjampakaikan kepada penerima. Rencana sisa dana Rp1.000.000: sisa zakat Rp500.000 menjadi modal penerima Gelombang 2, sisa infaq Rp500.000 untuk perlengkapan dan pendampingan Gelombang 2.</p>
+
+    <h3 id="audit">E. Pengawasan dan hasil pemeriksaan internal</h3>
+    <p class="note">Pemeriksa: Bendahara dan Pengawas Syariah Internal, 15 November 2026 (simulasi).</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Yang diperiksa</th><th>Hasil</th></tr></thead>
+        <tbody>
+          <tr><td>Rekap 12 transaksi sama dengan total dana masuk Rp20.000.000</td><td><span class="ok">Sesuai</span></td></tr>
+          <tr><td>Hak amil zakat 10% tidak melebihi batas 12,5%</td><td><span class="ok">Sesuai</span></td></tr>
+          <tr><td>Zakat, infaq, dan wakaf dicatat di buku terpisah</td><td><span class="ok">Sesuai</span></td></tr>
+          <tr><td>Penyaluran zakat hanya kepada fakir dan miskin</td><td><span class="ok">Sesuai</span></td></tr>
+          <tr><td>Dana masuk = tersalur + hak amil/biaya + sisa</td><td><span class="ok">Seimbang</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="evaluasi">F. Evaluasi dampak dan tindak lanjut</h3>
+    <div class="tw">
+      <table>
+        <caption>Omzet harian rata-rata (data simulasi)</caption>
+        <thead><tr><th>Penerima</th><th class="r">Sebelum (Rp)</th><th class="r">Sesudah 4 minggu (Rp)</th><th class="r">Perubahan</th></tr></thead>
+        <tbody>
+          <tr><td>P1 · Gorengan</td><td class="r">60.000</td><td class="r">110.000</td><td class="r">+83%</td></tr>
+          <tr><td>P2 · Angkringan</td><td class="r">150.000</td><td class="r">230.000</td><td class="r">+53%</td></tr>
+          <tr><td>P3 · Jahit</td><td class="r">40.000</td><td class="r">85.000</td><td class="r">+113%</td></tr>
+          <tr><td>P4 · Sayur</td><td class="r">80.000</td><td class="r">140.000</td><td class="r">+75%</td></tr>
+          <tr><td>P5 · Es dan kue</td><td class="r">70.000</td><td class="r">120.000</td><td class="r">+71%</td></tr>
+        </tbody>
+        <tfoot><tr><td>Jumlah</td><td class="r">400.000</td><td class="r">685.000</td><td class="r">+71%</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Kendala</span>
+        <ul style="margin:.4rem 0 0;padding-left:1.1rem;display:grid;gap:.3rem">
+          <li>Hujan di minggu kedua menurunkan penjualan dua penerima.</li>
+          <li>Sebagian penerima belum terbiasa mencatat untung rugi.</li>
+          <li>Harga bahan pokok naik saat stok dibeli.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Rencana lanjutan</span>
+        <ul style="margin:.4rem 0 0;padding-left:1.1rem;display:grid;gap:.3rem">
+          <li>Gelombang 2 pada Januari 2027: target Rp25.000.000 untuk 7 usaha.</li>
+          <li>Kelas pembukuan diulang dengan buku catat sederhana untuk tiap penerima.</li>
+          <li>Pendampingan lanjutan sebulan sekali selama tiga bulan.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>G. Pelaporan kepada donatur</h3>
+    <p class="note">Kabar ringkas tiap minggu lewat Instagram (fiktif), laporan lengkap di halaman ini, dan kabar penerima berupa cerita singkat tanpa data pribadi.</p>
+  </div>
+</section>
+
+<!-- 6. GALERI BUKTI -->
+<section class="sec alt" id="galeri">
+  <div class="wrap">
+    <h2>Galeri Bukti</h2>
+    <p class="lead">Karena ini simulasi, galeri memakai ilustrasi dan bukan foto kegiatan sungguhan. Tanggal dan lokasi mengikuti jadwal fiktif di bagian Program.</p>
+
+    <div class="cols fig">
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.500-6-10a6 6 0 1112 0c0 4.500-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Survei lokasi usaha</b></p><p class="cap">5–12 Oktober 2026 · sekitar kampus, Yogyakarta (fiktif)</p></figcaption>
+      </figure>
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Penandatanganan berita acara</b></p><p class="cap">17 Oktober 2026 · Balai RW (fiktif)</p></figcaption>
+      </figure>
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h3l2 10h10l2-7H7"/><circle cx="9" cy="19" r="1.500"/><circle cx="17" cy="19" r="1.500"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Serah terima alat usaha wakaf</b></p><p class="cap">17 Oktober 2026 · Balai RW (fiktif)</p></figcaption>
+      </figure>
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.500 2.700-6 6-6s6 2.500 6 6"/><circle cx="17" cy="9" r="2.500"/><path d="M17 14c2.500 0 4 2 4 5"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Kelas pembukuan sederhana</b></p><p class="cap">24 Oktober 2026 · Balai RW (fiktif)</p></figcaption>
+      </figure>
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Buku kas penerimaan dan penyaluran</b></p><p class="cap">Diperbarui 15 November 2026 · contoh format</p></figcaption>
+      </figure>
+      <figure class="card" style="margin:0">
+        <div class="shot"><em>ILUSTRASI</em><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></svg></div>
+        <figcaption style="margin-top:.6rem"><p><b>Wawancara evaluasi omzet</b></p><p class="cap">21 November 2026 · lokasi usaha (fiktif)</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 7. KONTAK -->
+<section class="sec" id="kontak">
+  <div class="wrap">
+    <h2>Kontak</h2>
+    <p class="lead">Semua kontak di bawah ini fiktif dan tidak aktif.</p>
+    <div class="card">
+      <dl class="k">
+        <dt>Sekretariat</dt><dd>Alamat fiktif, Yogyakarta</dd>
+        <dt>Email</dt><dd>kontak@amilusahaberkah.example</dd>
+        <dt>WhatsApp</dt><dd>08xx-xxxx-xxxx (fiktif)</dd>
+        <dt>Instagram</dt><dd>@amilusahaberkah (fiktif)</dd>
+        <dt>Jam layanan</dt><dd>Senin–Jumat, 09.00–16.00 WIB (simulasi)</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><b>SIMULASI – TUGAS KULIAH.</b> Amil Usaha Berkah adalah lembaga fiktif untuk mata kuliah Islamic Philanthropy, Program Studi Ekonomi Syariah, FEBI UIN Sunan Kalijaga Yogyakarta. Tidak ada uang sungguhan yang diterima atau disalurkan.</p>
+    <p><b>Pernyataan penggunaan AI:</b> teks program, tabel laporan, dan kode website dibantu Claude (Anthropic). Pemilihan topik, penyesuaian isi, dan foto pengurus oleh Muhammad Haikal Davisara. Arifin Ilham membantu sebagai relawan (bendahara).</p>
+    <p>Pendiri: Muhammad Haikal Davisara · NIM 24108010093</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var emas=document.getElementById('emas'), harta=document.getElementById('harta'), out=document.getElementById('hasil');
+  function rp(n){ return 'Rp'+new Intl.NumberFormat('id-ID').format(Math.round(n)); }
+  function hitung(){
+    var g=parseFloat(emas.value)||0, h=parseFloat(harta.value)||0;
+    if(g<=0||h<=0){ out.textContent='Isi harga emas dan total harta untuk melihat hasilnya.'; return; }
+    var nisab=85*g;
+    if(h>=nisab){
+      out.textContent='Nisab '+rp(nisab)+'. Hartamu mencapai nisab, zakat maal 2,5% sebesar '+rp(h*0.025)+'.';
+    } else {
+      out.textContent='Nisab '+rp(nisab)+'. Hartamu belum mencapai nisab, jadi belum wajib zakat maal. Kamu tetap bisa berinfaq.';
+    }
+  }
+  emas.addEventListener('input',hitung);
+  harta.addEventListener('input',hitung);
+  hitung();
+})();
+</script>
+
+</body>
+</html>
